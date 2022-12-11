@@ -79,7 +79,7 @@ namespace UnitTests
         }
         
         [TestCase(ParameterType.TopHeight, 
-            Parameters.MIN_TOP_HEIGHT, 
+            Parameters.MIN_THEIGHT, 
             TestName = "Positive Minimum Value TopHeight Get")]
         [TestCase(ParameterType.Bottom, 
             Parameters.MIN_BOTTOM, 
