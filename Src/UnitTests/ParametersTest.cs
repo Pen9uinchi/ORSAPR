@@ -79,7 +79,7 @@ namespace UnitTests
         }
         
         [TestCase(ParameterType.TopHeight, 
-            Parameters.MIN_TOP_HEIGHT_RADIUS, 
+            Parameters.MIN_TOP_HEIGHT, 
             TestName = "Positive Minimum Value TopHeight Get")]
         [TestCase(ParameterType.Bottom, 
             Parameters.MIN_BOTTOM, 
@@ -106,7 +106,7 @@ namespace UnitTests
         }
 
         [TestCase(ParameterType.TopHeight,
-            Parameters.MAX_TOP_HEIGHT_RADIUS,
+            Parameters.NOT_SET_MAX_OR_MIN_VALUE,
             TestName = "Positive Minimum Value TopHeight Get")]
         [TestCase(ParameterType.Bottom,
             Parameters.MAX_BOTTOM,
@@ -139,7 +139,7 @@ namespace UnitTests
         {
             return new Parameters
             {
-                TopHeight = 200,
+                TopHeight = 50,
                 Bottom = 10,
                 Height = 300,
                 Width = 200,

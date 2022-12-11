@@ -11,7 +11,7 @@ namespace PotParameters
         /// Top height of the pot
         /// </summary>
         private Parameter _topHeight = 
-            new Parameter(MIN_TOP_HEIGHT_RADIUS, MAX_TOP_HEIGHT_RADIUS);
+            new Parameter(MIN_THEIGHT, NOT_SET_MAX_OR_MIN_VALUE);
 
         /// <summary>
         /// Handle length of the pot
@@ -44,10 +44,7 @@ namespace PotParameters
         {
             get => _topHeight.ParameterValue;
 
-            set
-            {
-                _topHeight.ParameterValue = value;
-            }
+            set => _topHeight.ParameterValue = value;
         }
 
         /// <summary>
@@ -67,7 +64,14 @@ namespace PotParameters
         {
             get => _height.ParameterValue;
 
-            set => _height.ParameterValue = value;
+            set
+            {
+                _height.ParameterValue = value;
+
+                double TopHeightMax = 600 - value;
+
+                _topHeight.MaximumValue = TopHeightMax;
+            }
         }
 
         /// <summary>
@@ -90,15 +94,17 @@ namespace PotParameters
             set => _wallThickness.ParameterValue = value;
         }
 
+        
         /// <summary>
         ///Minimum value of Top Height
         /// </summary>
-        public const double MIN_TOP_HEIGHT_RADIUS = 150.0;
-
+        public const double MIN_THEIGHT = 50.0;
+        /*
         /// <summary>
         ///Maximum value of Top Height
         /// </summary>
-        public const double MAX_TOP_HEIGHT_RADIUS = 350.0;
+        public const double MAX_TOP_HEIGHT = 350.0;
+        */
 
         /// <summary>
         ///Minimum value of Handle Length
@@ -113,12 +119,12 @@ namespace PotParameters
         /// <summary>
         ///Minimum value of HEIGHT
         /// </summary>
-        public const double MIN_HEIGHT = 200.0;
+        public const double MIN_HEIGHT = 100.0;
 
         /// <summary>
         ///Maximum value of HEIGHT
         /// </summary>
-        public const double MAX_HEIGHT = 400.0;
+        public const double MAX_HEIGHT = 500.0;
 
         /// <summary>
         ///Minimum value of WIDTH
@@ -150,9 +156,9 @@ namespace PotParameters
         /// </summary>
         public void SetDefaultParameters()
         {
-            this.TopHeight = 200;
-            this.Bottom = 10;
             this.Height = 300;
+            this.Bottom = 10;
+            this.TopHeight = 50;
             this.Width = 300;
             this.WallThickness = 7;
         }
@@ -166,10 +172,6 @@ namespace PotParameters
         {
             switch (parameterType)
             {
-                case ParameterType.TopHeight:
-                {
-                    return this._topHeight.MinimumValue;
-                }
                 case ParameterType.Bottom:
                 {
                     return this._bottom.MinimumValue;
@@ -177,6 +179,10 @@ namespace PotParameters
                 case ParameterType.Height:
                 {
                     return this._height.MinimumValue;
+                }
+                case ParameterType.TopHeight:
+                {
+                    return this._topHeight.MinimumValue;
                 }
                 case ParameterType.Width:
                 {
@@ -202,10 +208,7 @@ namespace PotParameters
         {
             switch (parameterType)
             {
-                case ParameterType.TopHeight:
-                {
-                    return this._topHeight.MaximumValue;
-                }
+                
                 case ParameterType.Bottom:
                 {
                     return this._bottom.MinimumValue;
@@ -213,6 +216,10 @@ namespace PotParameters
                 case ParameterType.Height:
                 {
                     return this._height.MaximumValue;
+                }
+                case ParameterType.TopHeight:
+                {
+                    return this._topHeight.MaximumValue;
                 }
                 case ParameterType.Width:
                 {
@@ -238,11 +245,7 @@ namespace PotParameters
         {
             switch (parameterType)
             {
-                case ParameterType.TopHeight:
-                {
-                    this.TopHeight = value;
-                    break;
-                }
+                
                 case ParameterType.Bottom:
                 {
                     this.Bottom = value;
@@ -251,6 +254,11 @@ namespace PotParameters
                 case ParameterType.Height:
                 {
                     this.Height = value;
+                    break;
+                }
+                case ParameterType.TopHeight:
+                {
+                    this.TopHeight = value;
                     break;
                 }
                 case ParameterType.Width:

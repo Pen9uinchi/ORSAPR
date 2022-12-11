@@ -32,7 +32,7 @@ namespace FlowerPot
         /// <summary>
         /// Dictionary of Suggested Pairs (ComboBoxes, parameter name)
         /// </summary>
-        private Dictionary<ComboBox, ParameterType> _comboboxDictionary;
+        private Dictionary<TextBox, ParameterType> _textboxDictionary;
 
         /// <summary>
          /// Main form constructor
@@ -41,13 +41,13 @@ namespace FlowerPot
         {
             InitializeComponent();
 
-            _comboboxDictionary = new Dictionary<ComboBox, ParameterType>
+            _textboxDictionary = new Dictionary<TextBox, ParameterType>
             {
-                {bottomComboBox, ParameterType.Bottom},
-                {topHeightComboBox, ParameterType.TopHeight},
-                {heightComboBox, ParameterType.Height},
-                {widthComboBox, ParameterType.Width},
-                {wallThicknessComboBox, ParameterType.WallThickness},
+                {bottomTextBox, ParameterType.Bottom},
+                {heightTextBox, ParameterType.Height},
+                {topHeightTextBox, ParameterType.TopHeight},
+                {widthTextBox, ParameterType.Width},
+                {wallThicknessTextBox, ParameterType.WallThickness},
             };
         }
 
@@ -69,11 +69,11 @@ namespace FlowerPot
         {
             try
             {
-                _potParameters.TopHeight = ConvertStringToDouble(topHeightComboBox.Text);
-                _potParameters.Bottom = ConvertStringToDouble(bottomComboBox.Text);
-                _potParameters.Height = ConvertStringToDouble(heightComboBox.Text);
-                _potParameters.Width = ConvertStringToDouble(widthComboBox.Text);
-                _potParameters.WallThickness = ConvertStringToDouble(wallThicknessComboBox.Text);
+                _potParameters.Bottom = ConvertStringToDouble(bottomTextBox.Text);
+                _potParameters.Height = ConvertStringToDouble(heightTextBox.Text);
+                _potParameters.TopHeight = ConvertStringToDouble(topHeightTextBox.Text);
+                _potParameters.Width = ConvertStringToDouble(widthTextBox.Text);
+                _potParameters.WallThickness = ConvertStringToDouble(wallThicknessTextBox.Text);
 
             }
             catch (Exception exception)
@@ -104,45 +104,57 @@ namespace FlowerPot
         private void DefaultParametersButton_Click(object sender, EventArgs e)
         {
             _potParameters.SetDefaultParameters();
-
-            topHeightComboBox.Text =
-                _potParameters.TopHeight.ToString(CultureInfo.CurrentCulture);
-            wallThicknessComboBox.Text = 
-                _potParameters.WallThickness.ToString();
-            heightComboBox.Text = 
+            // CultureInfo.CurrentCulture
+            heightTextBox.Text =
                 _potParameters.Height.ToString();
-           bottomComboBox.Text = 
+            wallThicknessTextBox.Text = 
+                _potParameters.WallThickness.ToString();
+            topHeightTextBox.Text =
+                _potParameters.TopHeight.ToString();
+            bottomTextBox.Text = 
                _potParameters.Bottom.ToString();
-            widthComboBox.Text = 
+            widthTextBox.Text = 
                 _potParameters.Width.ToString();
 
             buildButton.Enabled = true;
 
-            topHeightComboBox.BackColor = Color.White;
-            handleLengthLabel.BackColor = Color.White;
-            heightComboBox.BackColor = Color.White;
-            widthComboBox.BackColor = Color.White;
-            wallThicknessComboBox.BackColor = Color.White;
+            topHeightTextBox.BackColor = Color.White;
+            bottomTextBox.BackColor = Color.White;
+            heightTextBox.BackColor = Color.White;
+            widthTextBox.BackColor = Color.White;
+            wallThicknessTextBox.BackColor = Color.White;
         }
         
         /// <summary>
         /// ComboBox validation method
         /// </summary>
         /// <param name="sender">ComboBox</param>
-        private void Combobox_Validating(object sender, EventArgs e)
+        private void TextBox_Validating(object sender, EventArgs e)
         {
-            if (!(sender is ComboBox comboBox)) return;
+            if (!(sender is TextBox textBox)) return;
             try
             {
-                _comboboxDictionary.TryGetValue(comboBox,
-                    out var parameterInComboboxType);
-                _potParameters.SetParameterValueByType(double.Parse(comboBox.Text),
-                    parameterInComboboxType);
-                comboBox.BackColor = Color.White;
+                _textboxDictionary.TryGetValue(textBox,
+                    out var parameterInTextboxType);
+                _potParameters.SetParameterValueByType(double.Parse(textBox.Text),
+                    parameterInTextboxType);
+                if (textBox == heightTextBox)
+                {
+                    topHeightTextBox.Enabled = true;
+                    var upHeightMax =
+                        _potParameters.GetMaximumValue(ParameterType.TopHeight);
+                    topHeightLabel.Text = $"(50" +
+                                             $"-{upHeightMax}) мм";
+                }
+                textBox.BackColor = Color.White;
             }
             catch (Exception)
             {
-                comboBox.BackColor = Color.Salmon;
+                if (textBox == heightTextBox)
+                {
+                    topHeightTextBox.Enabled = false;
+                }
+                textBox.BackColor = Color.Salmon;
             }
             SwitchingBuildButton();
         }
@@ -156,12 +168,12 @@ namespace FlowerPot
         {
             try
             {
-                foreach (var comboBoxParameterTypePair in _comboboxDictionary)
+                foreach (var textBoxParameterTypePair in _textboxDictionary)
                 {
-                    double.TryParse(comboBoxParameterTypePair.Key.Text, 
+                    double.TryParse(textBoxParameterTypePair.Key.Text, 
                         out double parameterValue);
                     _potParameters.SetParameterValueByType(
-                        parameterValue, comboBoxParameterTypePair.Value);
+                        parameterValue, textBoxParameterTypePair.Value);
                 }
 
                 buildButton.Enabled = true;
