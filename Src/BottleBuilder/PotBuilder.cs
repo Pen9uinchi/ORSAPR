@@ -10,7 +10,7 @@ using Kompas6Constants3D;
 namespace PotBuilder
 {
     /// <summary>
-    /// Class for build laboratory pot 
+    /// Class for build pot 
     /// </summary>
     public class Builder
     {
@@ -23,11 +23,11 @@ namespace PotBuilder
         /// Pot parameters
         /// </summary>
         private Parameters _parameters;
-        
+
         /// <summary>
         /// Variable pointing to sketchPoint
         /// </summary>
-        private ksSketchDefinition  _sketch;
+        private ksSketchDefinition _sketch;
 
         /// <summary>
         /// Method for building pot
@@ -39,10 +39,16 @@ namespace PotBuilder
             _connector = konnector;
             _connector.GetNewPart();
             _parameters = parameters;
-
-            BuildPotBase();
-            BuildSecondPotBase();
-
+            
+            if (_parameters.IsPotStraight)
+            {
+                BuildPotBase();
+                BuildSecondPotBase();
+            }
+            else
+            {
+                BuildAnotherPot();
+            }
         }
 
         /// <summary>
@@ -65,14 +71,15 @@ namespace PotBuilder
                 Y = 0
             };
             double circleRadius = _parameters.Width / 2 - _parameters.WallThickness;
+
             CreateCircle(_sketch, circleCentre, circleRadius);
 
             var pressThickness = _parameters.WallThickness;
             double pressHeight = _parameters.Height / 4 * 3;
             PressOutSketchThickness(_sketch, pressHeight, pressThickness, true, 0);
 
-            pressThickness = _parameters.Bottom;
-            PressOutSketch(_sketch, pressThickness, false, 0);
+            pressThickness = _parameters.Bottom * (-1);
+            PressOutSketch(_sketch, pressThickness, false, 2);
 
             var filletPoint = new Point3D
             {
@@ -106,9 +113,54 @@ namespace PotBuilder
             double pressHeight = _parameters.TopHeight;
             PressOutSketchThickness(_sketch, pressHeight, pressThickness, true, 0);
 
+        }
+
+        private void BuildAnotherPot()
+        {
+            var sketchPoint = new Point3D
+            {
+                X = 0,
+                Y = 0,
+                Z = 0
+            };
+
+            _sketch = CreateSketch(Obj3dType.o3d_planeXOY, true, sketchPoint);
+
+            var circleCentre = new Point2D
+            {
+                X = 0,
+                Y = 0
+            };
+            double circleRadius = _parameters.Width / 2 - _parameters.WallThickness;
+            CreateCircle(_sketch, circleCentre, circleRadius);
+
+            double angle = _parameters.AnglePot;
+
+            var pressThickness = _parameters.WallThickness;
+            double pressHeight = _parameters.Height / 4 * 3;
+            PressOutSketchThickness(_sketch, pressHeight, pressThickness, true, angle);
+
+            pressThickness = _parameters.Bottom * (-1);
+            PressOutSketch(_sketch, pressThickness, false, 0);
+
+            var filletPoint = new Point3D
+            {
+                X = _parameters.Width / 2,
+                Y = 0,
+                Z = 0
+            };
+            CreateEdgeFillet(filletPoint, _parameters.WallThickness);
+
+            sketchPoint = new Point3D
+            {
+                X = _parameters.Width / 2 - 2,
+                Y = 0,
+                Z = _parameters.Height / 4 * 3
+            };
+            _sketch = CreateSketch(Obj3dType.o3d_sketch, false, sketchPoint);
 
         }
-        
+
         /// <summary>
         /// Method for creating sketch
         /// </summary>
@@ -116,7 +168,7 @@ namespace PotBuilder
         /// <param name="isFirstSketch"></param>
         /// <param name="point">The point where the sketch will be created</param>
         /// <returns>Definition of the sketchPoint</returns>
-        private ksSketchDefinition CreateSketch(Obj3dType planeType, 
+        private ksSketchDefinition CreateSketch(Obj3dType planeType,
             bool isFirstSketch, Point3D point)
         {
             ksEntity plane = (ksEntity)_connector
@@ -130,7 +182,7 @@ namespace PotBuilder
             var sketchDefinition = (ksSketchDefinition)sketchPoint.GetDefinition();
             if (!isFirstSketch)
             {
-                ksEntityCollection iCollection = 
+                ksEntityCollection iCollection =
                     _connector.KsPart.EntityCollection((short)Obj3dType.o3d_face);
                 iCollection.SelectByPoint(point.X, point.Y, point.Z);
                 plane = iCollection.First();
@@ -176,11 +228,11 @@ namespace PotBuilder
 
             var extrusionDefinition = (ksBossExtrusionDefinition)extrusionEntity
                 .GetDefinition();
-            
+
             extrusionDefinition.SetSideParam(side, 0, thickness);
 
             extrusionDefinition.SetSketch(sketchPoint);
-            ExtrusionParam extrusionParam =  extrusionDefinition.ExtrusionParam();
+            ExtrusionParam extrusionParam = extrusionDefinition.ExtrusionParam();
             extrusionParam.depthNormal = thickness;
             extrusionParam.draftValueNormal = draftValue;
 
@@ -195,21 +247,21 @@ namespace PotBuilder
         /// <param name="wallThickness">Thickness of extrude</param>
         /// <param name="side">Side</param>
         /// <param name="draftValue">Draft value</param>
-        private void PressOutSketchThickness( ksSketchDefinition sketchPoint,
+        private void PressOutSketchThickness(ksSketchDefinition sketchPoint,
             double height, double wallThickness, bool side, double draftValue)
         {
 
             var extrusionEntity = (ksEntity)_connector
                 .KsPart
                 .NewEntity((short)Obj3dType.o3d_baseExtrusion);
-            
+
             var extrusionDefinition = (ksBaseExtrusionDefinition)extrusionEntity
                 .GetDefinition();
-            
+
             extrusionDefinition.SetSideParam(side, 0, height);
             extrusionDefinition.SetThinParam(true, 0, wallThickness);
-            
-            
+
+
             extrusionDefinition.SetSketch(sketchPoint);
             ExtrusionParam extrusionParam = extrusionDefinition.ExtrusionParam();
             extrusionParam.draftValueNormal = draftValue;
@@ -232,7 +284,7 @@ namespace PotBuilder
             filletDefinition.radius = radius;
 
             filletDefinition.tangent = true;
-            
+
             return filletEntity;
         }
 
@@ -297,7 +349,7 @@ namespace PotBuilder
 
             iCollection.SelectByPoint(point.X, point.Y, point.Z);
             var iEdge = iCollection.Last();
-            iArray.Add(iEdge);
+            // iArray.Add(iEdge);
 
             filletEntity.Create();
         }

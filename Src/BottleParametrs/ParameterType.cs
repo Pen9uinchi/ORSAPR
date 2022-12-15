@@ -8,7 +8,9 @@
         TopHeight,
         Bottom,
         Height,
+        AnglePot,
         Width,
-        WallThickness
+        WallThickness,
+        IsPotStraight
     }
 }

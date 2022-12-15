@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowerPotUI", "LaboratoryBo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotBuilder", "BottleBuilder\PotBuilder.csproj", "{6D683CFF-5D12-4015-8197-AD68428C0B3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BottleParameters", "BottleParametrs\BottleParameters.csproj", "{BCE5F1A9-A381-48B5-AF64-FEC4AB92ACF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotParameters", "BottleParametrs\PotParameters.csproj", "{BCE5F1A9-A381-48B5-AF64-FEC4AB92ACF1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KompasConnector", "KompassConnector\KompasConnector.csproj", "{E597121C-F48C-4872-BB90-E19FC92A826E}"
 EndProject

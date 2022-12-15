@@ -59,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BottleParametrs\BottleParameters.csproj">
+    <ProjectReference Include="..\BottleParametrs\PotParameters.csproj">
       <Project>{bce5f1a9-a381-48b5-af64-fec4ab92acf1}</Project>
-      <Name>BottleParameters</Name>
+      <Name>PotParameters</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

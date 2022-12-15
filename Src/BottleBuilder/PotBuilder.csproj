@@ -68,9 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BottleParametrs\BottleParameters.csproj">
+    <ProjectReference Include="..\BottleParametrs\PotParameters.csproj">
       <Project>{bce5f1a9-a381-48b5-af64-fec4ab92acf1}</Project>
-      <Name>BottleParameters</Name>
+      <Name>PotParameters</Name>
     </ProjectReference>
     <ProjectReference Include="..\KompassConnector\KompasConnector.csproj">
       <Project>{e597121c-f48c-4872-bb90-e19fc92a826e}</Project>

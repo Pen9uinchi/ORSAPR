@@ -30,7 +30,7 @@ namespace FlowerPot
         private Konnector _kompasConnector = new Konnector();
 
         /// <summary>
-        /// Dictionary of Suggested Pairs (ComboBoxes, parameter name)
+        /// Dictionary of Suggested Pairs (TextBoxes, parameter name)
         /// </summary>
         private Dictionary<TextBox, ParameterType> _textboxDictionary;
 
@@ -46,6 +46,7 @@ namespace FlowerPot
                 {bottomTextBox, ParameterType.Bottom},
                 {heightTextBox, ParameterType.Height},
                 {topHeightTextBox, ParameterType.TopHeight},
+                {angleTextBox, ParameterType.AnglePot},
                 {widthTextBox, ParameterType.Width},
                 {wallThicknessTextBox, ParameterType.WallThickness},
             };
@@ -72,6 +73,7 @@ namespace FlowerPot
                 _potParameters.Bottom = ConvertStringToDouble(bottomTextBox.Text);
                 _potParameters.Height = ConvertStringToDouble(heightTextBox.Text);
                 _potParameters.TopHeight = ConvertStringToDouble(topHeightTextBox.Text);
+                _potParameters.AnglePot = ConvertStringToDouble(angleTextBox.Text);
                 _potParameters.Width = ConvertStringToDouble(widthTextBox.Text);
                 _potParameters.WallThickness = ConvertStringToDouble(wallThicknessTextBox.Text);
 
@@ -115,18 +117,21 @@ namespace FlowerPot
                _potParameters.Bottom.ToString();
             widthTextBox.Text = 
                 _potParameters.Width.ToString();
+            angleTextBox.Text =
+                _potParameters.AnglePot.ToString();
 
             buildButton.Enabled = true;
 
             topHeightTextBox.BackColor = Color.White;
             bottomTextBox.BackColor = Color.White;
             heightTextBox.BackColor = Color.White;
+            angleTextBox.BackColor = Color.White;
             widthTextBox.BackColor = Color.White;
             wallThicknessTextBox.BackColor = Color.White;
         }
         
         /// <summary>
-        /// ComboBox validation method
+        /// TextBox validation method
         /// </summary>
         /// <param name="sender">ComboBox</param>
         private void TextBox_Validating(object sender, EventArgs e)
@@ -145,6 +150,28 @@ namespace FlowerPot
                         _potParameters.GetMaximumValue(ParameterType.TopHeight);
                     topHeightLabel.Text = $"(50" +
                                              $"-{upHeightMax}) мм";
+                    widthLabel.Text = $"(200" +
+                                          $"-400) мм";
+                }
+                else  if (textBox == topHeightTextBox)
+                {
+                    widthTextBox.Enabled = true;
+                    var widthMin =
+                        _potParameters.GetMinimumValue(ParameterType.Width);
+                    var widthMax =
+                        _potParameters.GetMaximumValue(ParameterType.Width);
+                        widthLabel.Text = $"({widthMin}" +
+                                          $"-{widthMax}) мм";
+                }
+                else if (textBox == angleTextBox)
+                {
+                    widthTextBox.Enabled = true;
+                    var widthMin =
+                        _potParameters.GetMinimumValue(ParameterType.Width);
+                    var widthMax =
+                        _potParameters.GetMaximumValue(ParameterType.Width);
+                    widthLabel.Text = $"({widthMin}" +
+                                      $"-{widthMax}) мм";
                 }
                 textBox.BackColor = Color.White;
             }
@@ -154,14 +181,19 @@ namespace FlowerPot
                 {
                     topHeightTextBox.Enabled = false;
                 }
+                else if (textBox == topHeightTextBox || textBox == angleTextBox)
+                {
+                    widthTextBox.Enabled = false;
+                }
                 textBox.BackColor = Color.Salmon;
             }
+
             SwitchingBuildButton();
         }
 
 
         /// <summary>
-        /// Enabled BuildButton if values in all ComboBoxes are correct
+        /// Enabled BuildButton if values in all TextBoxes are correct
         /// </summary>
         /// <returns></returns>
         private void SwitchingBuildButton()
@@ -184,14 +216,20 @@ namespace FlowerPot
             }
         }
 
-        private void flaskWithNeckRadioButton_CheckedChanged(object sender, EventArgs e)
+        private void conePotRadioButton_CheckedChanged_1(object sender, EventArgs e)
         {
+            _potParameters.IsPotStraight =
+                straightPotRadioButton.Checked;
+            
+            straightPotPictureBox.Visible = straightPotRadioButton.Checked;
+            topHeightLabel.Visible = straightPotRadioButton.Checked;
+            topHeightTextBox.Visible = straightPotRadioButton.Checked;
+            topHeightNameLabel.Visible = straightPotRadioButton.Checked;
 
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
+            conePotPictureBox.Visible = conePotRadioButton.Checked;
+            angleNameLabel.Visible = conePotRadioButton.Checked;
+            angleTextBox.Visible = conePotRadioButton.Checked;
+            angleLabel.Visible = conePotRadioButton.Checked;
         }
     }
 }

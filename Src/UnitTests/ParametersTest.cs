@@ -29,7 +29,7 @@ namespace UnitTests
                 var actualValue = actual.GetType().
                     GetProperty(propertyName).GetValue(actual);
                 var expectedValue = expectedProperty.GetValue(expected);
-              //  Assert.AreEqual(expectedValue, actualValue);
+                //Assert.AreEqual(expectedValue, actualValue);
             }
         }
         
@@ -39,6 +39,8 @@ namespace UnitTests
             TestName = "Positive Bottom get")]
         [TestCase(101, ParameterType.Height, 
             TestName = "Positive Height get")]
+        [TestCase(11, ParameterType.AnglePot,
+            TestName = "Positive Angle get")]
         [TestCase(201, ParameterType.Width, 
             TestName = "Positive Width get")]
         [TestCase(8, ParameterType.WallThickness, 
@@ -61,10 +63,14 @@ namespace UnitTests
             TestName = "Positive Height set")]
         [TestCase(100, ParameterType.TopHeight,
             TestName = "Positive TopHeight set")]
+        [TestCase(30, ParameterType.AnglePot,
+            TestName = "Positive Angle set")]
         [TestCase(220, ParameterType.Width, 
             TestName = "Positive Width set")]
         [TestCase(15, ParameterType.WallThickness, 
             TestName = "Positive Wall Thickness set")]
+        [TestCase(true, ParameterType.IsPotStraight,
+            TestName = "Positive IsPotStraight set")]
         public void Parameters_SetCorrectParameters(dynamic value, 
             ParameterType parameterType)
         {
@@ -87,12 +93,18 @@ namespace UnitTests
         [TestCase(ParameterType.TopHeight,
             Parameters.MIN_THEIGHT,
             TestName = "Positive Minimum Value TopHeight Get")]
+        [TestCase(ParameterType.AnglePot,
+            Parameters.MIN_ANGLE,
+            TestName = "Positive Minimum Value Angle Get")]
         [TestCase(ParameterType.Width, 
-            Parameters.MIN_WIDTH, 
+            Parameters.NOT_SET_MAX_OR_MIN_VALUE, 
             TestName = "Positive Minimum Value Wall Thickness Get")]
         [TestCase(ParameterType.WallThickness, 
             Parameters.MIN_WALL_THICKNESS, 
             TestName = "Positive Minimum Value Parameters Get")]
+        [TestCase(ParameterType.IsPotStraight,
+            Parameters.NOT_SET_MAX_OR_MIN_VALUE,
+            TestName = "Positive Minimum IsPotStraight Value Parameters Get")]
         public void Parameters_GetCorrectMinimumValues(ParameterType parameterType, 
             double minValue)
         {
@@ -114,12 +126,18 @@ namespace UnitTests
         [TestCase(ParameterType.Height, 
             Parameters.MAX_HEIGHT, 
             TestName = "Positive Maximum Value Width Get")]
+        [TestCase(ParameterType.AnglePot,
+            Parameters.MAX_ANGLE,
+            TestName = "Positive Maximum Value Angle Get")]
         [TestCase(ParameterType.Width, 
-            Parameters.MAX_WIDTH, 
+            Parameters.NOT_SET_MAX_OR_MIN_VALUE, 
             TestName = "Positive Maximum Value Wall Thickness Get")]
         [TestCase(ParameterType.WallThickness, 
             Parameters.MAX_WALL_THICKNESS, 
             TestName = "Positive Maximum Value Parameters Get")]
+        [TestCase(ParameterType.IsPotStraight,
+            Parameters.NOT_SET_MAX_OR_MIN_VALUE,
+            TestName = "Positive Maximum IsPotStraight Value Parameters Get")]
         public void Parameters_GetCorrectMaximumValues(ParameterType parameterType, 
             double maxValue)
         {
@@ -142,6 +160,7 @@ namespace UnitTests
                 Bottom = 10,
                 Height = 300,
                 TopHeight = 50,
+                AnglePot = 15,
                 Width = 200,
                 WallThickness = 7
             };
